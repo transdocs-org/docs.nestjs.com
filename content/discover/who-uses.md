@@ -1,9 +1,9 @@
-### Who is using Nest?
+### 谁在使用 Nest？
 
-We are proudly helping various companies building their products at scale.
-If you are using Nest and would you like to be listed here, see this [thread](https://github.com/nestjs/nest/issues/1006).
-We are willing to put your logo here!
+我们很自豪能够帮助各类公司大规模构建他们的产品。  
+如果你正在使用 Nest 并希望出现在此列表中，请查看这个 [帖子](https://github.com/nestjs/nest/issues/1006)。  
+我们很乐意将你们的 Logo 放在这里！
 
-#### Companies
+#### 公司
 
-According to our knowledge, all the following companies have built awesome projects on top of our framework:
+据我们所知，以下所有公司都在我们的框架基础上构建了优秀的项目：

@@ -1,66 +1,66 @@
-### Nest CLI and scripts
+### Nest CLI 和脚本
 
-This section provides additional background on how the `nest` command interacts with compilers and scripts to help DevOps personnel manage the development environment.
+本节提供有关 `nest` 命令如何与编译器和脚本交互的更多背景信息，以帮助 DevOps 人员管理开发环境。
 
-A Nest application is a **standard** TypeScript application that needs to be compiled to JavaScript before it can be executed. There are various ways to accomplish the compilation step, and developers/teams are free to choose a way that works best for them. With that in mind, Nest provides a set of tools out-of-the-box that seek to do the following:
+一个 Nest 应用程序是一个**标准的** TypeScript 应用程序，在执行之前需要编译为 JavaScript。完成编译步骤的方法有很多种，开发者/团队可以自由选择最适合自己的方式。考虑到这一点，Nest 提供了一组开箱即用的工具，旨在实现以下目标：
 
-- Provide a standard build/execute process, available at the command line, that "just works" with reasonable defaults.
-- Ensure that the build/execute process is **open**, so developers can directly access the underlying tools to customize them using native features and options.
-- Remain a completely standard TypeScript/Node.js framework, so that the entire compile/deploy/execute pipeline can be managed by any external tools that the development team chooses to use.
+- 提供一个标准的构建/执行流程，可通过命令行使用，并且在合理默认配置下“即开即用”。
+- 确保构建/执行流程是**开放的**，这样开发者可以直接访问底层工具，并使用其原生功能和选项进行自定义。
+- 保持完全标准的 TypeScript/Node.js 框架特性，这样开发团队可以选择的任何外部工具都可以管理整个编译/部署/执行流程。
 
-This goal is accomplished through a combination of the `nest` command, a locally installed TypeScript compiler, and `package.json` scripts. We describe how these technologies work together below. This should help you understand what's happening at each step of the build/execute process, and how to customize that behavior if necessary.
+通过 `nest` 命令、本地安装的 TypeScript 编译器以及 `package.json` 脚本的组合实现了这一目标。我们将在下文中描述这些技术如何协同工作。这将帮助你理解构建/执行流程中每一步发生了什么，以及在必要时如何自定义这些行为。
 
-#### The nest binary
+#### Nest 可执行文件
 
-The `nest` command is an OS level binary (i.e., runs from the OS command line). This command actually encompasses 3 distinct areas, described below. We recommend that you run the build (`nest build`) and execution (`nest start`) sub-commands via the `package.json` scripts provided automatically when a project is scaffolded (see [typescript starter](https://github.com/nestjs/typescript-starter) if you wish to start by cloning a repo, instead of running `nest new`).
+`nest` 命令是一个操作系统级别的二进制文件（即，从操作系统命令行运行）。该命令实际上涵盖了以下三个不同的功能区域。我们建议你通过项目脚手架时自动生成的 `package.json` 脚本来运行构建（`nest build`）和执行（`nest start`）子命令（如果你想通过克隆仓库开始开发而不是运行 `nest new`，请参阅 [typescript starter](https://github.com/nestjs/typescript-starter)）。
 
-#### Build
+#### 构建
 
-`nest build` is a wrapper on top of the standard `tsc` compiler or `swc` compiler (for [standard projects](https://docs.nestjs.com/cli/overview#project-structure)) or the webpack bundler using the `ts-loader` (for [monorepos](https://docs.nestjs.com/cli/overview#project-structure)). It does not add any other compilation features or steps except for handling `tsconfig-paths` out of the box. The reason it exists is that most developers, especially when starting out with Nest, do not need to adjust compiler options (e.g., `tsconfig.json` file) which can sometimes be tricky.
+`nest build` 是标准 `tsc` 编译器或 `swc` 编译器（适用于[标准项目](https://docs.nestjs.com/cli/overview#project-structure)）或使用 `ts-loader` 的 webpack 打包工具（适用于[单体仓库](https://docs.nestjs.com/cli/overview#project-structure)）的封装。它除了开箱即用地处理 `tsconfig-paths` 之外，不添加任何其他编译功能或步骤。它存在的原因是大多数开发者，特别是刚开始使用 Nest 的开发者，通常不需要调整编译器选项（例如 `tsconfig.json` 文件），而这些选项有时可能比较复杂。
 
-See the [nest build](https://docs.nestjs.com/cli/usages#nest-build) documentation for more details.
+更多细节请参阅 [nest build](https://docs.nestjs.com/cli/usages#nest-build) 文档。
 
-#### Execution
+#### 执行
 
-`nest start` simply ensures the project has been built (same as `nest build`), then invokes the `node` command in a portable, easy way to execute the compiled application. As with builds, you are free to customize this process as needed, either using the `nest start` command and its options, or completely replacing it. The entire process is a standard TypeScript application build and execute pipeline, and you are free to manage the process as such.
+`nest start` 简单地确保项目已经构建完成（等同于 `nest build`），然后以一种可移植、简便的方式调用 `node` 命令来执行编译后的应用程序。与构建过程一样，你可以根据需要自由地自定义此流程，无论是使用 `nest start` 命令及其选项，还是完全替换它。整个流程是一个标准的 TypeScript 应用程序构建和执行流程，你可以按此方式管理该流程。
 
-See the [nest start](https://docs.nestjs.com/cli/usages#nest-start) documentation for more details.
+更多细节请参阅 [nest start](https://docs.nestjs.com/cli/usages#nest-start) 文档。
 
-#### Generation
+#### 生成
 
-The `nest generate` commands, as the name implies, generate new Nest projects, or components within them.
+顾名思义，`nest generate` 命令用于生成新的 Nest 项目或其中的组件。
 
-#### Package scripts
+#### 包脚本（Package scripts）
 
-Running the `nest` commands at the OS command level requires that the `nest` binary be installed globally. This is a standard feature of npm, and outside of Nest's direct control. One consequence of this is that the globally installed `nest` binary is **not** managed as a project dependency in `package.json`. For example, two different developers can be running two different versions of the `nest` binary. The standard solution for this is to use package scripts so that you can treat the tools used in the build and execute steps as development dependencies.
+在操作系统命令行级别运行 `nest` 命令要求 `nest` 可执行文件已全局安装。这是 npm 的一项标准功能，不在 Nest 的直接控制范围内。这带来一个后果是全局安装的 `nest` 可执行文件**不会**作为项目的依赖项记录在 `package.json` 中。例如，两个不同的开发者可能运行的是不同版本的 `nest` 可执行文件。解决这个问题的标准方法是使用包脚本，这样你可以将构建和执行步骤中使用的工具作为开发依赖项进行管理。
 
-When you run `nest new`, or clone the [typescript starter](https://github.com/nestjs/typescript-starter), Nest populates the new project's `package.json` scripts with commands like `build` and `start`. It also installs the underlying compiler tools (such as `typescript`) as **dev dependencies**.
+当你运行 `nest new` 或克隆 [typescript starter](https://github.com/nestjs/typescript-starter) 时，Nest 会将 `build` 和 `start` 等命令填充到新项目的 `package.json` 脚本中。同时，它会将底层编译工具（如 `typescript`）安装为**开发依赖项**。
 
-You run the build and execute scripts with commands like:
+你可以使用如下命令运行构建和执行脚本：
 
 ```bash
 $ npm run build
 ```
 
-and
+和
 
 ```bash
 $ npm run start
 ```
 
-These commands use npm's script running capabilities to execute `nest build` or `nest start` using the **locally installed** `nest` binary. By using these built-in package scripts, you have full dependency management over the Nest CLI commands\*. This means that, by following this **recommended** usage, all members of your organization can be assured of running the same version of the commands.
+这些命令使用 npm 的脚本运行功能，通过**本地安装的** `nest` 可执行文件执行 `nest build` 或 `nest start`。通过使用这些内置的包脚本，你可以完全管理 Nest CLI 命令的依赖关系\*。这意味着，通过遵循这种**推荐**的使用方式，你的组织中的所有成员都可以确保运行相同版本的命令。
 
-\*This applies to the `build` and `start` commands. The `nest new` and `nest generate` commands aren't part of the build/execute pipeline, so they operate in a different context, and do not come with built-in `package.json` scripts.
+\*这适用于 `build` 和 `start` 命令。`nest new` 和 `nest generate` 命令不属于构建/执行流程，因此它们在不同的上下文中运行，并且没有内置的 `package.json` 脚本。
 
-For most developers/teams, it is recommended to utilize the package scripts for building and executing their Nest projects. You can fully customize the behavior of these scripts via their options (`--path`, `--webpack`, `--webpackPath`) and/or customize the `tsc` or webpack compiler options files (e.g., `tsconfig.json`) as needed. You are also free to run a completely custom build process to compile the TypeScript (or even to execute TypeScript directly with `ts-node`).
+对于大多数开发者/团队来说，建议使用包脚本来构建和执行他们的 Nest 项目。你可以通过其选项（`--path`、`--webpack`、`--webpackPath`）完全自定义这些脚本的行为，和/或根据需要自定义 `tsc` 或 webpack 编译器选项文件（例如 `tsconfig.json`）。你也可以自由运行完全自定义的构建流程来编译 TypeScript（甚至可以直接使用 `ts-node` 执行 TypeScript）。
 
-#### Backward compatibility
+#### 向后兼容性
 
-Because Nest applications are pure TypeScript applications, previous versions of the Nest build/execute scripts will continue to operate. You are not required to upgrade them. You can choose to take advantage of the new `nest build` and `nest start` commands when you are ready, or continue running previous or customized scripts.
+由于 Nest 应用程序是纯 TypeScript 应用程序，因此旧版本的 Nest 构建/执行脚本将继续运行。你无需升级它们。你可以在准备就绪时选择使用新的 `nest build` 和 `nest start` 命令，或者继续运行以前或自定义的脚本。
 
-#### Migration
+#### 迁移
 
-While you are not required to make any changes, you may want to migrate to using the new CLI commands instead of using tools such as `tsc-watch` or `ts-node`. In this case, simply install the latest version of the `@nestjs/cli`, both globally and locally:
+虽然你无需进行任何更改，但你可能希望迁移到使用新的 CLI 命令，而不是使用 `tsc-watch` 或 `ts-node` 等工具。在这种情况下，只需全局和本地安装最新版本的 `@nestjs/cli`：
 
 ```bash
 $ npm install -g @nestjs/cli
@@ -68,11 +68,11 @@ $ cd  /some/project/root/folder
 $ npm install -D @nestjs/cli
 ```
 
-You can then replace the `scripts` defined in `package.json` with the following ones:
+然后你可以将 `package.json` 中定义的 `scripts` 替换为以下内容：
 
-```typescript
+```json
 "build": "nest build",
 "start": "nest start",
 "start:dev": "nest start --watch",
-"start:debug": "nest start --debug --watch",
+"start:debug": "nest start --debug --watch"
 ```

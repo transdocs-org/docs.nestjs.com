@@ -1,10 +1,10 @@
-### Plugins with Apollo
+### 使用 Apollo 的插件
 
-Plugins enable you to extend Apollo Server's core functionality by performing custom operations in response to certain events. Currently, these events correspond to individual phases of the GraphQL request lifecycle, and to the startup of Apollo Server itself (read more [here](https://www.apollographql.com/docs/apollo-server/integrations/plugins/)). For example, a basic logging plugin might log the GraphQL query string associated with each request that's sent to Apollo Server.
+插件使您能够通过在响应特定事件时执行自定义操作来扩展 Apollo Server 的核心功能。目前，这些事件对应于 GraphQL 请求生命周期的各个阶段，以及 Apollo Server 自身的启动（详情请[点击此处](https://www.apollographql.com/docs/apollo-server/integrations/plugins/)）。例如，一个基本的日志插件可能会记录发送到 Apollo Server 的每个请求所关联的 GraphQL 查询字符串。
 
-#### Custom plugins
+#### 自定义插件
 
-To create a plugin, declare a class annotated with the `@Plugin` decorator exported from the `@nestjs/apollo` package. Also, for better code autocompletion, implement the `ApolloServerPlugin` interface from the `@apollo/server` package.
+要创建插件，请声明一个使用 `@nestjs/apollo` 包导出的 `@Plugin` 装饰器的类。此外，为了获得更好的代码自动补全功能，建议实现 `@apollo/server` 包中的 `ApolloServerPlugin` 接口。
 
 ```typescript
 import { ApolloServerPlugin, GraphQLRequestListener } from '@apollo/server';
@@ -13,17 +13,17 @@ import { Plugin } from '@nestjs/apollo';
 @Plugin()
 export class LoggingPlugin implements ApolloServerPlugin {
   async requestDidStart(): Promise<GraphQLRequestListener<any>> {
-    console.log('Request started');
+    console.log('请求开始');
     return {
       async willSendResponse() {
-        console.log('Will send response');
+        console.log('即将发送响应');
       },
     };
   }
 }
 ```
 
-With this in place, we can register the `LoggingPlugin` as a provider.
+完成上述设置后，我们可以将 `LoggingPlugin` 注册为提供者。
 
 ```typescript
 @Module({
@@ -32,28 +32,28 @@ With this in place, we can register the `LoggingPlugin` as a provider.
 export class CommonModule {}
 ```
 
-Nest will automatically instantiate a plugin and apply it to the Apollo Server.
+Nest 会自动实例化插件并将其应用到 Apollo Server。
 
-#### Using external plugins
+#### 使用外部插件
 
-There are several plugins provided out-of-the-box. To use an existing plugin, simply import it and add it to the `plugins` array:
+Apollo 提供了一些开箱即用的插件。要使用现有插件，只需导入它并添加到 `plugins` 数组中：
 
 ```typescript
 GraphQLModule.forRoot({
   // ...
-  plugins: [ApolloServerOperationRegistry({ /* options */})]
+  plugins: [ApolloServerOperationRegistry({ /* 选项 */ })]
 }),
 ```
 
-> info **Hint** The `ApolloServerOperationRegistry` plugin is exported from the `@apollo/server-plugin-operation-registry` package.
+> info **提示** `ApolloServerOperationRegistry` 插件是从 `@apollo/server-plugin-operation-registry` 包中导出的。
 
-#### Plugins with Mercurius
+#### 与 Mercurius 配合使用的插件
 
-Some of the existing mercurius-specific Fastify plugins must be loaded after the mercurius plugin (read more [here](https://mercurius.dev/#/docs/plugins)) on the plugin tree.
+某些现有的 Mercurius 特定 Fastify 插件必须在 Mercurius 插件之后加载到插件树中（详情请[点击此处](https://mercurius.dev/#/docs/plugins)）。
 
-> warning **Warning** [mercurius-upload](https://github.com/mercurius-js/mercurius-upload) is an exception and should be registered in the main file.
+> warning **警告** [mercurius-upload](https://github.com/mercurius-js/mercurius-upload) 是一个例外，应该在主文件中注册。
 
-For this, `MercuriusDriver` exposes an optional `plugins` configuration option. It represents an array of objects that consist of two attributes: `plugin` and its `options`. Therefore, registering the [cache plugin](https://github.com/mercurius-js/cache) would look like this:
+为此，`MercuriusDriver` 暴露了一个可选的 `plugins` 配置选项。它是一个对象数组，每个对象包含两个属性：`plugin` 和 `options`。因此，注册 [cache 插件](https://github.com/mercurius-js/cache) 将如下所示：
 
 ```typescript
 GraphQLModule.forRoot({

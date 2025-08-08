@@ -1,8 +1,8 @@
-### Generating SDL
+### 生成 SDL
 
-> warning **Warning** This chapter applies only to the code first approach.
+> warning **警告** 本章仅适用于代码优先（code first）方法。
 
-To manually generate a GraphQL SDL schema (i.e., without running an application, connecting to the database, hooking up resolvers, etc.), use the `GraphQLSchemaBuilderModule`.
+要手动生成 GraphQL SDL 模式（即，不运行应用程序、不连接数据库、不连接解析器等），请使用 `GraphQLSchemaBuilderModule`。
 
 ```typescript
 async function generateSchema() {
@@ -15,11 +15,11 @@ async function generateSchema() {
 }
 ```
 
-> info **Hint** The `GraphQLSchemaBuilderModule` and `GraphQLSchemaFactory` are imported from the `@nestjs/graphql` package. The `printSchema` function is imported from the `graphql` package.
+> info **提示** `GraphQLSchemaBuilderModule` 和 `GraphQLSchemaFactory` 是从 `@nestjs/graphql` 包中导入的。`printSchema` 函数是从 `graphql` 包中导入的。
 
-#### Usage
+#### 使用方法
 
-The `gqlSchemaFactory.create()` method takes an array of resolver class references. For example:
+`gqlSchemaFactory.create()` 方法接受一个解析器类引用的数组。例如：
 
 ```typescript
 const schema = await gqlSchemaFactory.create([
@@ -29,7 +29,7 @@ const schema = await gqlSchemaFactory.create([
 ]);
 ```
 
-It also takes a second optional argument with an array of scalar classes:
+它还接受第二个可选参数，该参数是一个包含标量类的数组：
 
 ```typescript
 const schema = await gqlSchemaFactory.create(
@@ -38,7 +38,7 @@ const schema = await gqlSchemaFactory.create(
 );
 ```
 
-Lastly, you can pass an options object:
+最后，您可以传递一个选项对象：
 
 ```typescript
 const schema = await gqlSchemaFactory.create([RecipesResolver], {
@@ -47,5 +47,5 @@ const schema = await gqlSchemaFactory.create([RecipesResolver], {
 });
 ```
 
-- `skipCheck`: ignore schema validation; boolean, defaults to `false`
-- `orphanedTypes`: list of classes that are not explicitly referenced (not part of the object graph) to be generated. Normally, if a class is declared but isn't otherwise referenced in the graph, it's omitted. The property value is an array of class references.
+- `skipCheck`：忽略模式验证；布尔值，默认为 `false`
+- `orphanedTypes`：未被显式引用（不属于对象图）但需要生成的类列表。通常，如果一个类被声明但在图中没有其他引用，则会被省略。该属性的值是一个类引用数组。

@@ -1,28 +1,28 @@
-### Documentation
+### 文档
 
-**Compodoc** is a documentation tool for Angular applications. Since Nest and Angular share similar project and code structures, **Compodoc** works with Nest applications as well.
+**Compodoc** 是一个用于 Angular 应用程序的文档生成工具。由于 Nest 与 Angular 拥有相似的项目和代码结构，**Compodoc** 同样适用于 Nest 应用程序。
 
-#### Setup
+#### 安装配置
 
-Setting up Compodoc inside an existing Nest project is very simple. Start by adding the dev-dependency with the following command in your OS terminal:
+在已有的 Nest 项目中安装配置 Compodoc 非常简单。首先，在你的操作系统终端中运行以下命令以添加开发依赖：
 
 ```bash
 $ npm i -D @compodoc/compodoc
 ```
 
-#### Generation
+#### 生成文档
 
-Generate project documentation using the following command (npm 6 is required for `npx` support). See [the official documentation](https://compodoc.app/guides/usage.html) for more options.
+使用以下命令生成项目文档（需要 npm 6 版本以支持 `npx` 功能）。更多选项请参阅[官方文档](https://compodoc.app/guides/usage.html)。
 
 ```bash
 $ npx @compodoc/compodoc -p tsconfig.json -s
 ```
 
-Open your browser and navigate to [http://localhost:8080](http://localhost:8080). You should see an initial Nest CLI project:
+打开浏览器并访问 [http://localhost:8080](http://localhost:8080)，你将看到一个初始的 Nest CLI 项目界面：
 
 <figure><img src="/assets/documentation-compodoc-1.jpg" /></figure>
 <figure><img src="/assets/documentation-compodoc-2.jpg" /></figure>
 
-#### Contribute
+#### 参与贡献
 
-You can participate and contribute to the Compodoc project [here](https://github.com/compodoc/compodoc).
+你可以在这里[参与并贡献](https://github.com/compodoc/compodoc) Compodoc 项目。

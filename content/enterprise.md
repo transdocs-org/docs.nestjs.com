@@ -1,23 +1,23 @@
-### Official NestJS Consulting
+### 官方 NestJS 咨询服务
 
-Our goal is to ensure that your developers are successful and productive with NestJS as well as other modern technologies in today's ever-changing tech world.
+我们的目标是在当今技术不断变化的环境中，确保您的开发团队能够高效且成功地使用 NestJS 以及其他现代技术。
 
-### Official Support
+### 官方支持
 
-With official support, get expert help directly from the NestJS core team. We tackle your toughest challenges, and collaborate with your team on many levels such as:
+通过官方支持，您可以直接从 NestJS 核心团队获得专家级帮助。我们协助您应对最具挑战性的难题，并在多个层面上与您的团队合作，包括：
 
-- Providing technical guidance & architectural reviews
-- **Mentoring** team members
-- Advising best practices
-- Solving design decisions
-- Addressing security & performance concerns
-- Performing **in-depth** code reviews
+- 提供技术指导和架构评审
+- **指导** 团队成员
+- 提供建议和最佳实践
+- 解决设计决策问题
+- 处理安全性与性能问题
+- 进行**深入的**代码审查
 
 <div class="row">
   <div class="content">
-    <h4>Team Augmentation & Development</h4>
+    <h4>团队增强与开发支持</h4>
     <p>
-      With team augmentation, NestJS core team members can work directly with your team on a daily basis to help take your project to the next-level. Consider us “part of your team”, tackling the most ambitious projects - right by your side.
+      通过团队增强服务，NestJS 核心团队成员可以与您的团队每天协作，帮助您的项目迈向新的高度。请将我们视为您团队的一部分，与您并肩作战，攻克最富雄心的项目。
     </p>
   </div>
   <div class="thumbnail p-l-30">
@@ -30,31 +30,31 @@ With official support, get expert help directly from the NestJS core team. We ta
     <img src="/assets/enterprise/contact.svg" />
   </div>
   <div class="content">
-    <h4>NestJS Best Practices</h4>
+    <h4>NestJS 最佳实践</h4>
     <p>
-      Frequent code reviews can eliminate potentially hazardous bugs & issues at an early stage and help enforce best practices. Let us perform PR reviews & audits to ensure your code quality, performance, and security.
+      频繁的代码审查可以在早期阶段消除潜在的危险 bug 和问题，并帮助团队贯彻最佳实践。我们可以协助进行 PR 审查和代码审计，以确保您的代码质量、性能和安全性。
     </p>
   </div>
 </div>
 
-#### First-hand access
+#### 第一手沟通渠道
 
-Direct communication channel will boost team velocity, giving a quick access to discuss and solve problems.
+建立直接的沟通渠道，提升团队效率，让您快速讨论并解决问题。
 
-#### NestJS Workshops and Trainings
+#### NestJS 工作坊与培训
 
-We provide solid kick-off training as well as more advanced ones that give teams an in-depth understanding of NestJS. We offer on-site workshops and remote intensive sessions which help get you up and running _quickly_ within the NestJS ecosystem.
+我们提供扎实的入门培训，以及更高级的课程，帮助团队深入理解 NestJS。我们提供现场工作坊和远程强化培训课程，助您快速进入 NestJS 生态系统。
 
 <div class="contact-us">
   <div class="column column-text">
-    <h5>Contact us!</h5>
+    <h5>联系我们！</h5>
     <p>
-    Let's talk how we can help you become successful with NestJS.
+    让我们聊聊我们如何帮助您在 NestJS 上取得成功。
     </p> 
   </div>
    <div class="column column-action">
-     <a href="mailto:support@nestjs.com">CONTACT US</a>
+     <a href="mailto:support@nestjs.com">联系我们</a>
    </div>
 </div>
 
-Reach out to us at [support@nestjs.com](mailto:support@nestjs.com), and let’s talk about your project & teams needs!
+请发送邮件至 [support@nestjs.com](mailto:support@nestjs.com)，与我们讨论您的项目和团队需求！

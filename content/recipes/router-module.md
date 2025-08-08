@@ -1,14 +1,10 @@
-### Router module
+### 路由模块
 
-> info **Hint** This chapter is only relevant to HTTP-based applications.
+> info **提示** 本章节仅适用于基于 HTTP 的应用程序。
 
-In an HTTP application (for example, REST API), the route path for a handler is determined by concatenating the (optional) prefix declared for the controller (inside the `@Controller` decorator),
-and any path specified in the method's decorator (e.g, `@Get('users')`). You can learn more about that in [this section](/controllers#routing). Additionally,
-you can define a [global prefix](/faq/global-prefix) for all routes registered in your application, or enable [versioning](/techniques/versioning).
+在 HTTP 应用程序中（例如 REST API），处理程序的路由路径是通过连接控制器中声明的（可选的）前缀（在 `@Controller` 装饰器中定义）以及方法装饰器中指定的路径（例如 `@Get('users')`）拼接而成的。你可以在[这一节](/controllers#路由)中了解更多相关内容。此外，你还可以为应用程序中注册的所有路由定义一个[全局前缀](/faq/global-prefix)，或者启用[版本控制](/techniques/versioning)功能。
 
-Also, there are edge-cases when defining a prefix at a module-level (and so for all controllers registered inside that module) may come in handy.
-For example, imagine a REST application that exposes several different endpoints being used by a specific portion of your application called "Dashboard".
-In such a case, instead of repeating the `/dashboard` prefix within each controller, you could use a utility `RouterModule` module, as follows:
+另外，有些特殊情况中，你可能希望在模块级别定义一个前缀（即该模块内注册的所有控制器都会继承该前缀），这时候就派上用场了。例如，假设有一个 REST 应用程序，其中有一组不同的端点被应用程序的某个叫做 "Dashboard" 的部分使用。在这种情况下，你不需要在每个控制器中重复 `/dashboard` 前缀，而是可以使用一个实用的 `RouterModule` 模块，如下所示：
 
 ```typescript
 @Module({
@@ -25,10 +21,9 @@ In such a case, instead of repeating the `/dashboard` prefix within each control
 export class AppModule {}
 ```
 
-> info **Hint** The `RouterModule` class is exported from the `@nestjs/core` package.
+> info **提示** `RouterModule` 类是从 `@nestjs/core` 包中导出的。
 
-In addition, you can define hierarchical structures. This means each module can have `children` modules.
-The children modules will inherit their parent's prefix. In the following example, we'll register the `AdminModule` as a parent module of `DashboardModule` and `MetricsModule`.
+此外，你还可以定义层级结构。这意味着每个模块都可以拥有 `children` 子模块。子模块将继承其父模块的前缀。在下面的示例中，我们将 `AdminModule` 注册为 `DashboardModule` 和 `MetricsModule` 的父模块。
 
 ```typescript
 @Module({
@@ -51,12 +46,11 @@ The children modules will inherit their parent's prefix. In the following exampl
           },
         ],
       },
-    ])
+    ]),
   ],
-});
+})
 ```
 
-> info **Hint** This feature should be used very carefully, as overusing it can make code difficult to maintain over time.
+> info **提示** 此功能应谨慎使用，因为过度使用可能会导致代码难以维护。
 
-In the example above, any controller registered inside the `DashboardModule` will have an extra `/admin/dashboard` prefix (as the module concatenates paths from top to bottom - recursively - parent to children).
-Likewise, each controller defined inside the `MetricsModule` will have an additional module-level prefix `/admin/metrics`.
+在上面的示例中，任何在 `DashboardModule` 中注册的控制器都会自动加上 `/admin/dashboard` 前缀（模块会从上到下递归地拼接路径 —— 父级到子级）。同理，`MetricsModule` 中定义的每个控制器也会自动加上模块级别的 `/admin/metrics` 前缀。

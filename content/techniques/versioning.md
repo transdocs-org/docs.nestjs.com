@@ -1,59 +1,59 @@
-### Versioning
+### 版本控制
 
-> info **Hint** This chapter is only relevant to HTTP-based applications.
+> info **提示** 本章节仅适用于基于 HTTP 的应用程序。
 
-Versioning allows you to have **different versions** of your controllers or individual routes running within the same application. Applications change very often and it is not unusual that there are breaking changes that you need to make while still needing to support the previous version of the application.
+版本控制允许你在同一个应用程序中运行具有**不同版本**的控制器或单个路由。应用程序经常发生变化，有时需要进行破坏性更改，同时还需要支持旧版本的应用程序接口。
 
-There are 4 types of versioning that are supported:
+目前支持以下 4 种版本控制方式：
 
 <table>
   <tr>
-    <td><a href='techniques/versioning#uri-versioning-type'><code>URI Versioning</code></a></td>
-    <td>The version will be passed within the URI of the request (default)</td>
+    <td><a href='techniques/versioning#uri-versioning-type'><code>URI 版本控制</code></a></td>
+    <td>版本信息将包含在请求的 URI 中（默认方式）</td>
   </tr>
   <tr>
-    <td><a href='techniques/versioning#header-versioning-type'><code>Header Versioning</code></a></td>
-    <td>A custom request header will specify the version</td>
+    <td><a href='techniques/versioning#header-versioning-type'><code>Header 版本控制</code></a></td>
+    <td>使用自定义请求头来指定版本</td>
   </tr>
   <tr>
-    <td><a href='techniques/versioning#media-type-versioning-type'><code>Media Type Versioning</code></a></td>
-    <td>The <code>Accept</code> header of the request will specify the version</td>
+    <td><a href='techniques/versioning#media-type-versioning-type'><code>媒体类型版本控制</code></a></td>
+    <td>通过请求的 <code>Accept</code> 请求头来指定版本</td>
   </tr>
   <tr>
-    <td><a href='techniques/versioning#custom-versioning-type'><code>Custom Versioning</code></a></td>
-    <td>Any aspect of the request may be used to specify the version(s). A custom function is provided to extract said version(s).</td>
+    <td><a href='techniques/versioning#custom-versioning-type'><code>自定义版本控制</code></a></td>
+    <td>可以使用请求中的任意部分来指定版本。你需要提供一个自定义函数来提取版本信息。</td>
   </tr>
 </table>
 
-#### URI Versioning Type
+#### URI 版本控制
 
-URI Versioning uses the version passed within the URI of the request, such as `https://example.com/v1/route` and `https://example.com/v2/route`.
+URI 版本控制使用请求 URI 中的版本信息，例如：`https://example.com/v1/route` 和 `https://example.com/v2/route`。
 
-> warning **Notice** With URI Versioning the version will be automatically added to the URI after the <a href="faq/global-prefix">global path prefix</a> (if one exists), and before any controller or route paths.
+> warning **注意** 使用 URI 版本控制时，版本号会自动添加到 <a href="faq/global-prefix">全局路径前缀</a>（如果存在）之后，并在控制器或路由路径之前。
 
-To enable URI Versioning for your application, do the following:
+要为你的应用程序启用 URI 版本控制，请执行以下操作：
 
 ```typescript
 @@filename(main)
 const app = await NestFactory.create(AppModule);
-// or "app.enableVersioning()"
+// 或 "app.enableVersioning()"
 app.enableVersioning({
   type: VersioningType.URI,
 });
 await app.listen(process.env.PORT ?? 3000);
 ```
 
-> warning **Notice** The version in the URI will be automatically prefixed with `v` by default, however the prefix value can be configured by setting the `prefix` key to your desired prefix or `false` if you wish to disable it.
+> warning **注意** 默认情况下，URI 中的版本号会自动以 `v` 开头，但你可以通过设置 `prefix` 键来更改前缀，或者设置为 `false` 来禁用该功能。
 
-> info **Hint** The `VersioningType` enum is available to use for the `type` property and is imported from the `@nestjs/common` package.
+> info **提示** `VersioningType` 枚举用于 `type` 属性，它可以从 `@nestjs/common` 包中导入。
 
-#### Header Versioning Type
+#### Header 版本控制
 
-Header Versioning uses a custom, user specified, request header to specify the version where the value of the header will be the version to use for the request.
+Header 版本控制使用一个用户指定的自定义请求头来指定版本信息，请求头的值即为版本号。
 
-Example HTTP Requests for Header Versioning:
+Header 版本控制的 HTTP 请求示例：
 
-To enable **Header Versioning** for your application, do the following:
+要为你的应用程序启用 **Header 版本控制**，请执行以下操作：
 
 ```typescript
 @@filename(main)
@@ -65,17 +65,17 @@ app.enableVersioning({
 await app.listen(process.env.PORT ?? 3000);
 ```
 
-The `header` property should be the name of the header that will contain the version of the request.
+`header` 属性应该指定包含版本信息的请求头名称。
 
-> info **Hint** The `VersioningType` enum is available to use for the `type` property and is imported from the `@nestjs/common` package.
+> info **提示** `VersioningType` 枚举用于 `type` 属性，它可以从 `@nestjs/common` 包中导入。
 
-#### Media Type Versioning Type
+#### 媒体类型版本控制
 
-Media Type Versioning uses the `Accept` header of the request to specify the version.
+媒体类型版本控制使用请求的 `Accept` 请求头来指定版本信息。
 
-Within the `Accept` header, the version will be separated from the media type with a semi-colon, `;`. It should then contain a key-value pair that represents the version to use for the request, such as `Accept: application/json;v=2`. They key is treated more as a prefix when determining the version will to be configured to include the key and separator.
+在 `Accept` 请求头中，版本号会通过分号 `;` 与媒体类型分隔。然后应包含一个键值对来表示请求所使用的版本，例如：`Accept: application/json;v=2`。在确定版本时，键会被视为前缀，配置时需要包含键和分隔符。
 
-To enable **Media Type Versioning** for your application, do the following:
+要为你的应用程序启用 **媒体类型版本控制**，请执行以下操作：
 
 ```typescript
 @@filename(main)
@@ -87,37 +87,30 @@ app.enableVersioning({
 await app.listen(process.env.PORT ?? 3000);
 ```
 
-The `key` property should be the key and separator of the key-value pair that contains the version. For the example `Accept: application/json;v=2`, the `key` property would be set to `v=`.
+`key` 属性应该指定包含版本号的键值对的键和分隔符。例如，对于 `Accept: application/json;v=2`，`key` 应设置为 `v=`。
 
-> info **Hint** The `VersioningType` enum is available to use for the `type` property and is imported from the `@nestjs/common` package.
+> info **提示** `VersioningType` 枚举用于 `type` 属性，它可以从 `@nestjs/common` 包中导入。
 
-#### Custom Versioning Type
+#### 自定义版本控制
 
-Custom Versioning uses any aspect of the request to specify the version (or versions). The incoming request is analyzed
-using an `extractor` function that returns a string or array of strings.
+自定义版本控制允许你使用请求中的任意部分来指定一个或多个版本。通过一个 `extractor` 函数来分析传入请求，并返回一个字符串或字符串数组。
 
-If multiple versions are provided by the requester, the extractor function can return an array of strings, sorted in
-order of greatest/highest version to smallest/lowest version. Versions are matched to routes in order from highest to
-lowest.
+如果请求者提供了多个版本号，`extractor` 函数可以返回一个字符串数组，按从高到低的顺序排序。版本号会按照从高到低的顺序与路由进行匹配。
 
-If an empty string or array is returned from the `extractor`, no routes are matched and a 404 is returned.
+如果 `extractor` 返回空字符串或空数组，则不会匹配任何路由，并返回 404。
 
-For example, if an incoming request specifies it supports versions `1`, `2`, and `3`, the `extractor` **MUST** return `[3, 2, 1]`. This ensures that the highest possible route version is selected first.
+例如，如果一个请求中指定了支持版本 `1`、`2` 和 `3`，那么 `extractor` 函数**必须**返回 `[3, 2, 1]`。这确保了首先选择最高的可用路由版本。
 
-If versions `[3, 2, 1]` are extracted, but routes only exist for version `2` and `1`, the route that matches version `2`
-is selected (version `3` is automatically ignored).
+如果提取的版本是 `[3, 2, 1]`，但只有版本 `2` 和 `1` 的路由存在，则会选择版本 `2` 的路由（忽略版本 `3`）。
 
-> warning **Notice** Selecting the highest matching version based on the array returned from `extractor` > **does not reliably work** with the Express adapter due to design limitations. A single version (either a string or
-> array of 1 element) works just fine in Express. Fastify correctly supports both highest matching version
-> selection and single version selection.
+> warning **注意** 由于 Express 适配器的设计限制，根据 `extractor` 返回的数组选择最高匹配版本**不能可靠工作**。对于 Express，单个版本（字符串或长度为 1 的数组）没有问题。Fastify 则正确支持最高版本匹配和单个版本匹配。
 
-To enable **Custom Versioning** for your application, create an `extractor` function and pass it into your application
-like so:
+要为你的应用程序启用 **自定义版本控制**，请创建一个 `extractor` 函数，并像下面这样传入：
 
 ```typescript
 @@filename(main)
-// Example extractor that pulls out a list of versions from a custom header and turns it into a sorted array.
-// This example uses Fastify, but Express requests can be processed in a similar way.
+// 示例 extractor 函数，从自定义请求头中提取版本列表并排序。
+// 本例使用 Fastify，但 Express 的请求也可以类似处理。
 const extractor = (request: FastifyRequest): string | string[] =>
   [request.headers['custom-versioning-field'] ?? '']
      .flatMap(v => v.split(','))
@@ -133,17 +126,17 @@ app.enableVersioning({
 await app.listen(process.env.PORT ?? 3000);
 ```
 
-#### Usage
+#### 使用方法
 
-Versioning allows you to version controllers, individual routes, and also provides a way for certain resources to opt-out of versioning. The usage of versioning is the same regardless of the Versioning Type your application uses.
+版本控制允许你对控制器、单个路由进行版本控制，还提供了一种机制让某些资源选择不参与版本控制。无论你的应用程序使用哪种版本控制方式，使用方式都是一样的。
 
-> warning **Notice** If versioning is enabled for the application but the controller or route does not specify the version, any requests to that controller/route will be returned a `404` response status. Similarly, if a request is received containing a version that does not have a corresponding controller or route, it will also be returned a `404` response status.
+> warning **注意** 如果应用程序启用了版本控制，但控制器或路由没有指定版本，则对该控制器/路由的任何请求都会返回 `404` 响应状态码。同样，如果收到的请求包含了一个没有对应控制器或路由的版本，也会返回 `404` 响应状态码。
 
-#### Controller versions
+#### 控制器版本
 
-A version can be applied to a controller, setting the version for all routes within the controller.
+可以为控制器指定一个版本，这将为该控制器内的所有路由设置版本。
 
-To add a version to a controller do the following:
+为控制器添加版本的方法如下：
 
 ```typescript
 @@filename(cats.controller)
@@ -168,11 +161,11 @@ export class CatsControllerV1 {
 }
 ```
 
-#### Route versions
+#### 路由版本
 
-A version can be applied to an individual route. This version will override any other version that would effect the route, such as the Controller Version.
+可以为单个路由指定版本。这个版本将覆盖影响该路由的其他版本，例如控制器版本。
 
-To add a version to an individual route do the following:
+为单个路由添加版本的方法如下：
 
 ```typescript
 @@filename(cats.controller)
@@ -211,11 +204,11 @@ export class CatsController {
 }
 ```
 
-#### Multiple versions
+#### 多个版本
 
-Multiple versions can be applied to a controller or route. To use multiple versions, you would set the version to be an Array.
+可以为一个控制器或路由指定多个版本。要使用多个版本，只需将版本设置为数组形式。
 
-To add multiple versions do the following:
+为控制器或路由添加多个版本的方法如下：
 
 ```typescript
 @@filename(cats.controller)
@@ -240,15 +233,15 @@ export class CatsController {
 }
 ```
 
-#### Version "Neutral"
+#### 版本 "中立"
 
-Some controllers or routes may not care about the version and would have the same functionality regardless of the version. To accommodate this, the version can be set to `VERSION_NEUTRAL` symbol.
+某些控制器或路由可能不关心版本，它们的功能在所有版本中保持一致。为了支持这种场景，可以将版本设置为 `VERSION_NEUTRAL` 符号。
 
-An incoming request will be mapped to a `VERSION_NEUTRAL` controller or route regardless of the version sent in the request in addition to if the request does not contain a version at all.
+无论请求中是否包含版本号，或包含哪个版本号，传入的请求都会映射到标记为 `VERSION_NEUTRAL` 的控制器或路由。
 
-> warning **Notice** For URI Versioning, a `VERSION_NEUTRAL` resource would not have the version present in the URI.
+> warning **注意** 对于 URI 版本控制，`VERSION_NEUTRAL` 资源在 URI 中不会包含版本信息。
 
-To add a version neutral controller or route do the following:
+为控制器或路由添加版本中立的方法如下：
 
 ```typescript
 @@filename(cats.controller)
@@ -277,25 +270,25 @@ export class CatsController {
 }
 ```
 
-#### Global default version
+#### 全局默认版本
 
-If you do not want to provide a version for each controller/or individual routes, or if you want to have a specific version set as the default version for every controller/route that don't have the version specified, you could set the `defaultVersion` as follows:
+如果你不想为每个控制器或路由单独指定版本，或者希望为所有未指定版本的控制器/路由设置一个默认版本，可以设置 `defaultVersion`，如下所示：
 
 ```typescript
 @@filename(main)
 app.enableVersioning({
   // ...
   defaultVersion: '1'
-  // or
+  // 或
   defaultVersion: ['1', '2']
-  // or
+  // 或
   defaultVersion: VERSION_NEUTRAL
 });
 ```
 
-#### Middleware versioning
+#### 中间件版本控制
 
-[Middlewares](https://docs.nestjs.com/middleware) can also use versioning metadata to configure the middleware for a specific route's version. To do so, provide the version number as one of the parameters for the `MiddlewareConsumer.forRoutes()` method:
+[Middlewares](https://docs.nestjs.com/middleware) 也可以使用版本控制元数据来为特定版本的路由配置中间件。为此，将版本号作为 `MiddlewareConsumer.forRoutes()` 方法的一个参数传入：
 
 ```typescript
 @@filename(app.module)
@@ -316,6 +309,6 @@ export class AppModule implements NestModule {
 }
 ```
 
-With the code above, the `LoggerMiddleware` will only be applied to the version '2' of `/cats` endpoint.
+上述代码中，`LoggerMiddleware` 仅会应用于 `/cats` 接口的版本 `2`。
 
-> info **Notice** Middlewares work with any versioning type described in the this section: `URI`, `Header`, `Media Type` or `Custom`.
+> info **注意** 中间件可以与本节中描述的任意版本控制方式一起使用：`URI`、`Header`、`Media Type` 或 `Custom`。
