@@ -1,12 +1,12 @@
-### Pipes
+### 管道
 
-There is no fundamental difference between [regular pipes](/pipes) and microservices pipes. The only difference is that instead of throwing `HttpException`, you should use `RpcException`.
+[常规管道](/pipes) 和微服务管道之间没有本质区别。唯一的区别是，你应该使用 `RpcException` 而不是抛出 `HttpException`。
 
-> info **Hint** The `RpcException` class is exposed from `@nestjs/microservices` package.
+> info **提示** `RpcException` 类是从 `@nestjs/microservices` 包中导出的。
 
-#### Binding pipes
+#### 绑定管道
 
-The following example uses a manually instantiated method-scoped pipe. Just as with HTTP based applications, you can also use controller-scoped pipes (i.e., prefix the controller class with a `@UsePipes()` decorator).
+下面的例子使用了手动实例化的方法作用域管道。与基于 HTTP 的应用程序一样，你也可以使用控制器作用域的管道（即，在控制器类前添加 `@UsePipes()` 装饰器）。
 
 ```typescript
 @@filename()

@@ -1,13 +1,13 @@
-### Guards
+### 守卫
 
-There is no fundamental difference between microservices guards and [regular HTTP application guards](/guards).
-The only difference is that instead of throwing `HttpException`, you should use `RpcException`.
+微服务守卫与[常规 HTTP 应用程序守卫](/guards)之间没有根本的区别。
+唯一的不同之处在于，你应该使用 `RpcException` 而不是抛出 `HttpException`。
 
-> info **Hint** The `RpcException` class is exposed from `@nestjs/microservices` package.
+> info **Hint** `RpcException` 类是从 `@nestjs/microservices` 包中导出的。
 
-#### Binding guards
+#### 绑定守卫
 
-The following example uses a method-scoped guard. Just as with HTTP based applications, you can also use controller-scoped guards (i.e., prefix the controller class with a `@UseGuards()` decorator).
+以下示例使用了方法作用域的守卫。与基于 HTTP 的应用程序一样，你也可以使用控制器作用域的守卫（即，在控制器类前添加 `@UseGuards()` 装饰器）。
 
 ```typescript
 @@filename()

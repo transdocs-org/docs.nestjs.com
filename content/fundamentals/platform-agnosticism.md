@@ -1,13 +1,13 @@
-### Platform agnosticism
+### 平台无关性
 
-Nest is a platform-agnostic framework. This means you can develop **reusable logical parts** that can be used across different types of applications. For example, most components can be re-used without change across different underlying HTTP server frameworks (e.g., Express and Fastify), and even across different _types_ of applications (e.g., HTTP server frameworks, Microservices with different transport layers, and Web Sockets).
+Nest 是一个平台无关的框架。这意味着你可以开发 **可重用的逻辑组件**，这些组件可以在不同种类的应用程序中使用。例如，大多数组件可以在不同的底层 HTTP 服务器框架（如 Express 和 Fastify）之间无需修改即可重用，甚至可以在不同 _类型_ 的应用程序之间重用（如 HTTP 服务器框架、使用不同传输层的微服务以及 Web Sockets）。
 
-#### Build once, use everywhere
+#### 一次构建，到处使用
 
-The **Overview** section of the documentation primarily shows coding techniques using HTTP server frameworks (e.g., apps providing a REST API or providing an MVC-style server-side rendered app). However, all those building blocks can be used on top of different transport layers ([microservices](/microservices/basics) or [websockets](/websockets/gateways)).
+文档中的 **概览** 部分主要展示了基于 HTTP 服务器框架的编码技术（例如提供 REST API 或提供 MVC 风格服务器端渲染页面的应用程序）。然而，所有这些构建模块都可以在不同传输层之上使用（[微服务](/microservices/basics) 或 [WebSockets](/websockets/gateways)）。
 
-Furthermore, Nest comes with a dedicated [GraphQL](/graphql/quick-start) module. You can use GraphQL as your API layer interchangeably with providing a REST API.
+此外，Nest 还提供了专门的 [GraphQL](/graphql/quick-start) 模块。你可以将 GraphQL 作为 API 层与 REST API 互换使用。
 
-In addition, the [application context](/application-context) feature helps to create any kind of Node.js application - including things like CRON jobs and CLI apps - on top of Nest.
+另外，[应用上下文](/application-context) 功能帮助你在 Nest 的基础上创建各种类型的 Node.js 应用程序——包括 CRON 任务和命令行工具等。
 
-Nest aspires to be a full-fledged platform for Node.js apps that brings a higher-level of modularity and reusability to your applications. Build once, use everywhere!
+Nest 旨在成为一个功能完善的 Node.js 应用平台，为你的应用程序带来更高层次的模块化和可重用性。一次构建，到处使用！

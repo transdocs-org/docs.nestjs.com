@@ -1,52 +1,52 @@
 ### Sentry
 
-[Sentry](https://sentry.io) is an error tracking and performance monitoring platform that helps developers identify and fix issues in real-time. This recipe shows how to integrate Sentry's [NestJS SDK](https://docs.sentry.io/platforms/javascript/guides/nestjs/) with your NestJS application.
+[Sentry](https://sentry.io) 是一个错误追踪和性能监控平台，帮助开发者实时识别和修复问题。本指南展示了如何将 Sentry 的 [NestJS SDK](https://docs.sentry.io/platforms/javascript/guides/nestjs/) 集成到你的 NestJS 应用中。
 
-#### Installation
+#### 安装
 
-First, install the required dependencies:
+首先，安装所需的依赖项：
 
 ```bash
 $ npm install --save @sentry/nestjs @sentry/profiling-node
 ```
 
-> info **Hint** `@sentry/profiling-node` is optional, but recommended for performance profiling.
+> info **提示** `@sentry/profiling-node` 是可选的，但推荐用于性能分析。
 
-#### Basic setup
+#### 基础配置
 
-To get started with Sentry, you'll need to create a file named `instrument.ts` that should be imported before any other modules in your application:
+要开始使用 Sentry，你需要创建一个名为 `instrument.ts` 的文件，并在应用程序中导入它，且必须在其他模块之前导入：
 
 ```typescript
 @@filename(instrument)
 const Sentry = require("@sentry/nestjs");
 const { nodeProfilingIntegration } = require("@sentry/profiling-node");
 
-// Ensure to call this before requiring any other modules!
+// 确保在引入其他模块之前调用！
 Sentry.init({
   dsn: SENTRY_DSN,
   integrations: [
-    // Add our Profiling integration
+    // 添加我们的性能分析集成
     nodeProfilingIntegration(),
   ],
 
-  // Add Tracing by setting tracesSampleRate
-  // We recommend adjusting this value in production
+  // 通过设置 tracesSampleRate 启用追踪
+  // 我们建议在生产环境中调整此值
   tracesSampleRate: 1.0,
 
-  // Set sampling rate for profiling
-  // This is relative to tracesSampleRate
+  // 设置性能分析的采样率
+  // 这是相对于 tracesSampleRate 的值
   profilesSampleRate: 1.0,
 });
 ```
 
-Update your `main.ts` file to import `instrument.ts` before other imports:
+更新你的 `main.ts` 文件，确保在其他导入之前导入 `instrument.ts`：
 
 ```typescript
 @@filename(main)
-// Import this first!
+// 首先导入！
 import "./instrument";
 
-// Now import other modules
+// 然后导入其他模块
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 
@@ -58,7 +58,7 @@ async function bootstrap() {
 bootstrap();
 ```
 
-Afterwards, add the `SentryModule` as a root module to your main module:
+之后，将 `SentryModule` 作为根模块添加到你的主模块中：
 
 ```typescript
 @@filename(app.module)
@@ -70,7 +70,7 @@ import { AppService } from "./app.service";
 @Module({
   imports: [
     SentryModule.forRoot(),
-    // ...other modules
+    // ...其他模块
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -78,9 +78,9 @@ import { AppService } from "./app.service";
 export class AppModule {}
 ```
 
-#### Exception handling
+#### 异常处理
 
-If you're using a global catch-all exception filter (which is either a filter registered with `app.useGlobalFilters()` or a filter registered in your app module providers annotated with a `@Catch()` decorator without arguments), add a `@SentryExceptionCaptured()` decorator to the filter's `catch()` method. This decorator will report all unexpected errors that are received by your global error filter to Sentry:
+如果你使用了全局的异常过滤器（即通过 `app.useGlobalFilters()` 注册的过滤器，或在模块提供者中使用 `@Catch()` 装饰器且未指定参数注册的过滤器），请在过滤器的 `catch()` 方法上添加 `@SentryExceptionCaptured()` 装饰器。该装饰器会将所有未处理的异常报告给 Sentry：
 
 ```typescript
 import { Catch, ExceptionFilter } from '@nestjs/common';
@@ -90,16 +90,16 @@ import { SentryExceptionCaptured } from '@sentry/nestjs';
 export class YourCatchAllExceptionFilter implements ExceptionFilter {
   @SentryExceptionCaptured()
   catch(exception, host): void {
-    // your implementation here
+    // 你的实现代码
   }
 }
 ```
 
-By default, only unhandled exceptions that are not caught by an error filter are reported to Sentry. `HttpExceptions` (including [derivatives](https://docs.nestjs.com/exception-filters#built-in-http-exceptions)) are also not captured by default because they mostly act as control flow vehicles.
+默认情况下，只有未被异常过滤器捕获的未处理异常会被报告给 Sentry。`HttpExceptions`（包括[派生类](https://docs.nestjs.com/exception-filters#built-in-http-exceptions)）也不会被默认捕获，因为它们通常用于控制流程。
 
-If you don't have a global catch-all exception filter, add the `SentryGlobalFilter` to the providers of your main module. This filter will report any unhandled errors that aren't caught by other error filters to Sentry.
+如果你没有使用全局的异常过滤器，请将 `SentryGlobalFilter` 添加到主模块的提供者中。该过滤器会将未被其他异常过滤器捕获的错误报告给 Sentry。
 
-> warning **Warning** The `SentryGlobalFilter` needs to be registered before any other exception filters.
+> warning **警告** `SentryGlobalFilter` 必须在其他异常过滤器之前注册。
 
 ```typescript
 @@filename(app.module)
@@ -113,25 +113,25 @@ import { SentryGlobalFilter } from "@sentry/nestjs/setup";
       provide: APP_FILTER,
       useClass: SentryGlobalFilter,
     },
-    // ..other providers
+    // ..其他提供者
   ],
 })
 export class AppModule {}
 ```
 
-#### Readable stack traces
+#### 可读性堆栈追踪
 
-Depending on how you've set up your project, the stack traces in your Sentry errors probably won't look like your actual code.
+根据你的项目配置，Sentry 中的堆栈追踪可能无法显示你实际的源代码。
 
-To fix this, upload your source maps to Sentry. The easiest way to do this is by using the Sentry Wizard:
+要解决此问题，请将你的源映射（source maps）上传到 Sentry。最简单的方法是使用 Sentry Wizard：
 
 ```bash
 npx @sentry/wizard@latest -i sourcemaps
 ```
 
-#### Testing the integration
+#### 测试集成
 
-To verify your Sentry integration is working, you can add a test endpoint that throws an error:
+要验证 Sentry 集成是否正常工作，可以添加一个触发错误的测试端点：
 
 ```typescript
 @Get("debug-sentry")
@@ -140,10 +140,10 @@ getError() {
 }
 ```
 
-Visit `/debug-sentry` in your application, and you should see the error appear in your Sentry dashboard.
+访问应用中的 `/debug-sentry` 路由，你应该能在 Sentry 的仪表板中看到该错误。
 
-### Summary
+### 总结
 
-For complete documentation about Sentry's NestJS SDK, including advanced configuration options and features, visit the [official Sentry documentation](https://docs.sentry.io/platforms/javascript/guides/nestjs/).
+关于 Sentry 的 NestJS SDK 的完整文档，包括高级配置选项和功能，请访问 [官方 Sentry 文档](https://docs.sentry.io/platforms/javascript/guides/nestjs/)。
 
-While software bugs are Sentry's thing, we still write them. If you come across any problems while installing our SDK, please open a [GitHub Issue](https://github.com/getsentry/sentry-javascript/issues) or reach out on [Discord](https://discord.com/invite/sentry).
+虽然 Sentry 擅长处理软件错误，但我们自己也会写 Bug。如果你在安装 SDK 时遇到任何问题，请提交 [GitHub Issue](https://github.com/getsentry/sentry-javascript/issues) 或在 [Discord](https://discord.com/invite/sentry) 上联系我们。

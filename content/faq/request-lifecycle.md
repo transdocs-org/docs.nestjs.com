@@ -1,14 +1,14 @@
-### Request lifecycle
+### 请求生命周期
 
-Nest applications handle requests and produce responses in a sequence we refer to as the **request lifecycle**. With the use of middleware, pipes, guards, and interceptors, it can be challenging to track down where a particular piece of code executes during the request lifecycle, especially as global, controller level, and route level components come into play. In general, a request flows through middleware to guards, then to interceptors, then to pipes and finally back to interceptors on the return path (as the response is generated).
+Nest 应用程序通过我们称之为 **请求生命周期** 的一系列顺序来处理请求并生成响应。由于使用了中间件、管道、守卫和拦截器，要追踪特定代码在请求生命周期中的执行位置可能会变得复杂，尤其是在使用全局、控制器级别和路由级别的组件时。总体而言，一个请求会依次经过中间件 → 守卫 → 拦截器 → 管道，最终在生成响应时再返回到拦截器。
 
-#### Middleware
+#### 中间件
 
-Middleware is executed in a particular sequence. First, Nest runs globally bound middleware (such as middleware bound with `app.use`) and then it runs [module bound middleware](/middleware), which are determined on paths. Middleware are run sequentially in the order they are bound, similar to the way middleware in Express works. In the case of middleware bound across different modules, the middleware bound to the root module will run first, and then middleware will run in the order that the modules are added to the imports array.
+中间件会按照特定的顺序执行。首先，Nest 会运行全局绑定的中间件（例如使用 `app.use` 绑定的中间件），然后运行[模块绑定的中间件](/middleware)，这些中间件根据路径来确定。中间件按照绑定顺序依次执行，这与 Express 中的中间件执行方式类似。当在不同模块中绑定中间件时，根模块绑定的中间件会最先执行，之后中间件的执行顺序与模块在 `imports` 数组中添加的顺序一致。
 
-#### Guards
+#### 守卫
 
-Guard execution starts with global guards, then proceeds to controller guards, and finally to route guards. As with middleware, guards run in the order in which they are bound. For example:
+守卫的执行顺序首先是全局守卫，接着是控制器守卫，最后是路由守卫。和中间件一样，守卫也按照绑定顺序依次执行。例如：
 
 ```typescript
 @UseGuards(Guard1, Guard2)
@@ -24,17 +24,17 @@ export class CatsController {
 }
 ```
 
-`Guard1` will execute before `Guard2` and both will execute before `Guard3`.
+`Guard1` 会在 `Guard2` 之前执行，而 `Guard2` 又会在 `Guard3` 之前执行。
 
-> info **Hint** When speaking about globally bound vs controller or locally bound, the difference is where the guard (or other component is bound). If you are using `app.useGlobalGuard()` or providing the component via a module, it is globally bound. Otherwise, it is bound to a controller if the decorator precedes a controller class, or to a route if the decorator precedes a route declaration.
+> info **提示** 当我们提到全局绑定与控制器或局部绑定的区别时，关键在于守卫（或其他组件）绑定的位置。如果你使用 `app.useGlobalGuard()` 或通过模块提供组件，则该组件是全局绑定的。否则，如果装饰器位于控制器类之前，则绑定到控制器；如果装饰器位于路由声明之前，则绑定到路由。
 
-#### Interceptors
+#### 拦截器
 
-Interceptors, for the most part, follow the same pattern as guards, with one catch: as interceptors return [RxJS Observables](https://github.com/ReactiveX/rxjs), the observables will be resolved in a first in last out manner. So inbound requests will go through the standard global, controller, route level resolution, but the response side of the request (i.e., after returning from the controller method handler) will be resolved from route to controller to global. Also, any errors thrown by pipes, controllers, or services can be read in the `catchError` operator of an interceptor.
+拦截器的执行模式与守卫基本相同，但有一个关键点：由于拦截器返回的是 [RxJS Observables](https://github.com/ReactiveX/rxjs)，这些 Observable 会以先进后出的方式解析。因此，进入请求会按照全局 → 控制器 → 路由的顺序处理，而响应（即控制器方法处理完成后）则会从路由 → 控制器 → 全局的顺序处理。此外，管道、控制器或服务中抛出的任何错误都可以在拦截器的 `catchError` 操作符中捕获。
 
-#### Pipes
+#### 管道
 
-Pipes follow the standard global to controller to route bound sequence, with the same first in first out in regards to the `@UsePipes()` parameters. However, at a route parameter level, if you have multiple pipes running, they will run in the order of the last parameter with a pipe to the first. This also applies to the route level and controller level pipes. For example, if we have the following controller:
+管道的执行顺序也是从全局到控制器再到路由，并且 `@UsePipes()` 参数的执行顺序是先进先出。然而，在路由参数级别，如果有多个管道同时运行，它们会按照最后一个带有管道的参数到第一个参数的顺序执行。这同样适用于路由级别和控制器级别的管道。例如，如果我们有以下控制器：
 
 ```typescript
 @UsePipes(GeneralValidationPipe)
@@ -54,43 +54,43 @@ export class CatsController {
 }
 ```
 
-then the `GeneralValidationPipe` will run for the `query`, then the `params`, and then the `body` objects before moving on to the `RouteSpecificPipe`, which follows the same order. If any parameter-specific pipes were in place, they would run (again, from the last to first parameter) after the controller and route level pipes.
+那么 `GeneralValidationPipe` 会依次作用于 `query`、`params` 和 `body` 对象，之后才会运行 `RouteSpecificPipe`，其顺序也是一致的。如果有任何参数级别的管道，它们也会在控制器和路由级别的管道之后运行（同样是从最后一个参数到第一个参数的顺序）。
 
-#### Filters
+#### 过滤器
 
-Filters are the only component that do not resolve global first. Instead, filters resolve from the lowest level possible, meaning execution starts with any route bound filters and proceeding next to controller level, and finally to global filters. Note that exceptions cannot be passed from filter to filter; if a route level filter catches the exception, a controller or global level filter cannot catch the same exception. The only way to achieve an effect like this is to use inheritance between the filters.
+过滤器是唯一一个不优先解析全局组件的机制。相反，过滤器会从最低级别开始解析，即执行顺序是路由绑定的过滤器 → 控制器级别的过滤器 → 全局过滤器。需要注意的是，异常不会在多个过滤器之间传递；如果一个路由级别的过滤器捕获了异常，控制器或全局级别的过滤器将无法再捕获相同的异常。实现类似效果的唯一方式是在过滤器之间使用继承。
 
-> info **Hint** Filters are only executed if any uncaught exception occurs during the request process. Caught exceptions, such as those caught with a `try/catch` will not trigger Exception Filters to fire. As soon as an uncaught exception is encountered, the rest of the lifecycle is ignored and the request skips straight to the filter.
+> info **提示** 只有在请求过程中出现未捕获的异常时才会执行过滤器。通过 `try/catch` 捕获的异常不会触发异常过滤器。一旦遇到未捕获的异常，生命周期的其余部分将被跳过，请求会直接进入过滤器。
 
-#### Summary
+#### 总结
 
-In general, the request lifecycle looks like the following:
+总的来说，请求生命周期如下所示：
 
-1. Incoming request
-2. Middleware
-   - 2.1. Globally bound middleware
-   - 2.2. Module bound middleware
-3. Guards
-   - 3.1 Global guards
-   - 3.2 Controller guards
-   - 3.3 Route guards
-4. Interceptors (pre-controller)
-   - 4.1 Global interceptors
-   - 4.2 Controller interceptors
-   - 4.3 Route interceptors
-5. Pipes
-   - 5.1 Global pipes
-   - 5.2 Controller pipes
-   - 5.3 Route pipes
-   - 5.4 Route parameter pipes
-6. Controller (method handler)
-7. Service (if exists)
-8. Interceptors (post-request)
-   - 8.1 Route interceptor
-   - 8.2 Controller interceptor
-   - 8.3 Global interceptor
-9. Exception filters
-   - 9.1 route
-   - 9.2 controller
-   - 9.3 global
-10. Server response
+1. 接收到请求
+2. 中间件
+   - 2.1 全局绑定中间件
+   - 2.2 模块绑定中间件
+3. 守卫
+   - 3.1 全局守卫
+   - 3.2 控制器守卫
+   - 3.3 路由守卫
+4. 拦截器（控制器前）
+   - 4.1 全局拦截器
+   - 4.2 控制器拦截器
+   - 4.3 路由拦截器
+5. 管道
+   - 5.1 全局管道
+   - 5.2 控制器管道
+   - 5.3 路由管道
+   - 5.4 路由参数管道
+6. 控制器（方法处理器）
+7. 服务（如果存在）
+8. 拦截器（请求后）
+   - 8.1 路由拦截器
+   - 8.2 控制器拦截器
+   - 8.3 全局拦截器
+9. 异常过滤器
+   - 9.1 路由级别
+   - 9.2 控制器级别
+   - 9.3 全局级别
+10. 服务器响应
