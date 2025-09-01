@@ -1,0 +1,607 @@
+@use '../../scss/utils';
+@use '../../scss/variables';
+
+.container-fluid {
+  position: relative;
+  display: block;
+  table-layout: fixed;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.logo-wrapper {
+  svg,
+  img {
+    width: 42px;
+    height: 50px;
+  }
+}
+.container {
+  @extend .transition;
+  @extend .box-sizing;
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  padding: 85px 85px 0;
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+
+  &.wide {
+    margin-left: 0;
+    width: 100%;
+    display: block;
+  }
+
+  @include utils.media(large) {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    padding: 85px 50px 0;
+    &.wide {
+      width: 100%;
+    }
+  }
+  @include utils.media(medium) {
+    //@include transform(translateX(0));
+    margin-left: 0;
+    width: 100%;
+    padding: 85px 20px 0;
+  }
+
+  @media print {
+    margin-left: 0;
+    width: 100%;
+    padding: 0 20px 0;
+  }
+}
+
+.page-wrapper {
+  color: var(--color);
+  line-height: 26px;
+
+  a {
+    font-weight: 600;
+    color: var(--primary-3dp);
+    &:hover {
+      color: #0894e2;
+    }
+  }
+
+  .content a {
+    transition: none;
+    @include utils.text-gradient();
+
+    &:hover {
+      background: #0894e2;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .content blockquote strong, .content #carbonads a, .content blockquote a {
+    -webkit-text-fill-color: unset !important;
+    -webkit-background-clip: unset !important;
+    background: none;
+
+    &:hover {
+      background: none;
+    }
+  }
+
+  .content a:has(> code) {
+    -webkit-text-fill-color: unset !important;
+    -webkit-background-clip: unset !important;
+    background: none;
+
+    &:hover {
+      background: none;
+    }
+  }
+
+  .content .banner a {
+    -webkit-text-fill-color: unset !important;
+    -webkit-background-clip: unset !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-1dp);
+  }
+  h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 45px 0 20px;
+  }
+  h4 {
+    font-weight: 600;
+    margin: 40px 0 -5px;
+  }
+  h3,
+  h4 {
+    a {
+      @include utils.opacity(0);
+      margin-left: 0.1em;
+      padding: 0 0.25rem;
+    }
+    span:hover + a,
+    span + a:hover,
+    a:focus {
+      @include utils.opacity(1);
+    }
+    &::before {
+      content: '';
+      display: block;
+      position: relative;
+      width: 0;
+      height: 5em;
+      margin-top: -5em;
+      pointer-events: none;
+    }
+  }
+  h5 {
+    color: var(--color);
+    margin-top: 5px;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  h3:first-of-type {
+    margin: 20px 0;
+  }
+  h3 + h5 {
+    margin-top: -10px !important;
+  }
+  p {
+    // text-align: justify;
+  }
+}
+
+.sponsors-wrapper {
+  border-top: 1px solid var(--background-2dp);
+  padding: 10px 0 60px;
+  margin-top: 20px;
+  position: relative;
+
+  img {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  a {
+    color: var(--primary);
+    font-weight: 600;
+    &:hover {
+      color: #0894e2;
+    }
+  }
+
+  h3 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  h4 {
+    color: var(--color-1dp);
+    font-weight: 600;
+    margin: 0;
+    font-size: 18px;
+    margin: 30px 0 18px;
+  }
+
+  .title {
+    margin: 50px 0 25px;
+  }
+
+  p {
+    margin: 0;
+    line-height: 26px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color);
+  }
+
+  .logo-sponsor-container {
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 15px;
+    margin-bottom: 5px;
+
+    &:last-of-type {
+      margin-right: 0;
+      margin-bottom: 0;
+    }
+    @media (max-width: 480px) {
+      display: block;
+      margin-bottom: 20px;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .logo-sponsor {
+    width: 160px;
+    filter: var(--company-logo-filter);
+
+    &:hover {
+      filter: grayscale(0);
+    }
+  }
+
+  .logo-sponsor--high {
+    width: 140px;
+  }
+
+  .logo-sponsor--slim {
+    width: auto;
+    max-height: 60px;
+    @media (max-width: 480px) {
+      margin-left: 0;
+    }
+  }
+
+  .logo-blueanchor {
+    width: 200px;
+  }
+
+  .btn-primary {
+    color: var(--primary-4dp);
+    padding: 12px 20px;
+    display: inline-block;
+    border-radius: 2px;
+    position: relative;
+
+    span {
+      @include utils.text-gradient();
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 2px;
+      padding: 2px;
+      background: var(--primary-gradient);
+      -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    &:hover {
+      color: #0894e2;
+      &::before {
+        background: #0894e2;
+      }
+      span {
+        background: #0894e2;
+      }
+    }
+  }
+}
+
+.sponsors-carbon {
+  @media (min-width: 1200px) {
+    width: calc(100% - 220px);
+  }
+}
+
+.backers-wrapper {
+  margin-top: 10px;
+  img {
+    width: 30px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+  }
+}
+
+.inline-column {
+  width: 50%;
+  vertical-align: top;
+  margin: 0;
+  float: left;
+
+  @include utils.media(normal) {
+    width: 100%;
+    float: none;
+  }
+}
+
+.toc-wrapper,
+.content,
+.companies-wrapper {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.content,
+.companies-wrapper {
+  width: calc(100% - 220px);
+  @media print {
+    width: 100%;
+  }
+  @include utils.media(large) {
+    width: 100%;
+  }
+
+  .row {
+    display: flex;
+    @include utils.media(normal) {
+      display: block;
+    }
+  }
+
+  .thumbnail {
+    width: 400px;
+
+    @include utils.media(normal) {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    img {
+      max-width: 100%;
+      padding-top: 10px;
+      padding-bottom: 0;
+      box-sizing: border-box;
+    }
+
+    &.p-l-30 img {
+      padding-left: 30px;
+
+      @include utils.media(normal) {
+        padding-left: 0;
+      }
+    }
+
+    &.p-r-30 img {
+      padding-right: 30px;
+
+      @include utils.media(normal) {
+        padding-right: 0;
+      }
+    }
+  }
+
+  .content {
+    flex-basis: 55%;
+  }
+
+  .contact-us {
+    background: var(--primary);
+    color: #fff;
+    padding: 20px 30px;
+    border-radius: 3px;
+    margin: 35px 0;
+    display: flex;
+    align-items: center;
+
+    @include utils.media(medium) {
+      display: block;
+      text-align: center;
+      p {
+        text-align: center;
+      }
+    }
+
+    h5 {
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+    }
+    p {
+      margin: 0;
+    }
+    a {
+      background: #fff;
+      border: 2px solid #fff;
+      box-sizing: border-box;
+      padding: 8px 16px;
+      border-radius: 4px;
+      float: right;
+      display: block;
+      text-align: center;
+
+      &:hover {
+        background: transparent;
+        color: #fff;
+      }
+
+      @include utils.media(medium) {
+        width: 150px;
+        margin: 15px auto 0;
+        float: none;
+      }
+    }
+
+    .column {
+      justify-content: center;
+      flex-direction: column;
+    }
+    .column-text {
+      flex-grow: 3;
+      margin-right: 20px;
+    }
+  }
+}
+
+.github-links {
+  float: right;
+  margin-top: 24px;
+
+  svg {
+    font-size: 17px;
+    color: var(--color-1dp);
+  }
+
+  a:hover svg {
+    color: var(--primary);
+  }
+}
+
+.toc-wrapper {
+  @include utils.media(large) {
+    display: none;
+  }
+}
+
+.company-logo {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 10px 20px;
+}
+
+.company-logo img {
+  max-width: 130px;
+  max-height: 60px;
+  padding: 6px;
+  -webkit-filter: var(--company-filter);
+  filter: var(--company-filter);
+  opacity: var(--company-logo-opacity);
+  
+  &:hover {
+    -webkit-filter: var(--company-filter-hover);
+    filter: var(--company-filter-hover);
+    opacity: 1;
+  }
+}
+
+.companies-list a {
+  color: var(--color);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+#carbonads a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+#carbonads a:hover {
+  color: inherit;
+}
+
+#carbonads span {
+  display: block;
+  overflow: hidden;
+}
+
+#carbonads_1,
+#carbonads_2 {
+  display: none;
+}
+
+.carbon-img {
+  display: block;
+  margin: 0 auto 8px;
+  line-height: 1;
+}
+
+.carbon-text {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.carbon-poweredby {
+  text-transform: uppercase;
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.carbon-wrapper {
+  #carbonads {
+    position: fixed;
+    z-index: 11;
+    display: block;
+    right: 65px;
+    bottom: 20px;
+    overflow: hidden;
+    padding: 1em;
+    background: var(--background-2dp) !important;
+    text-align: center;
+    line-height: 1.5;
+    font-size: 13px;
+    max-width: 130px;
+  }
+
+  @include utils.media(large) {
+    #carbonads {
+      margin: 16px 0 16px 16px;
+      padding: 12px;
+      float: right;
+      position: static;
+    }
+  }
+
+  @include utils.media(normal) {
+    #carbonads {
+      margin: 16px 0 16px 16px;
+      padding: 12px;
+      text-align: left;
+    }
+  }
+
+  @media (max-width: 360px) {
+    #carbonads {
+      display: none;
+    }
+  }
+
+  @media print {
+    display: none;
+  }
+}
+
+.algolia-autocomplete .ds-dropdown-menu {
+  width: 460px;
+  min-width: 460px;
+  margin-top: 18px;
+}
+
+.algolia-autocomplete .algolia-docsearch-suggestion--category-header {
+  color: #151515;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column {
+  color: #757575;
+}
+
+.algolia-autocomplete .algolia-docsearch-suggestion--title {
+  font-weight: 600;
+  color: 151515;
+}
+
+.algolia-autocomplete .algolia-docsearch-suggestion--text {
+  font-size: 0.8rem;
+  color: gray;
+}
+
+.algolia-autocomplete .algolia-docsearch-suggestion--highlight {
+  color: var(--primary);
+  background: #fff2f4;
+}
+
+.algolia-autocomplete
+  .ds-dropdown-menu
+  .ds-suggestion.ds-cursor
+  .algolia-docsearch-suggestion.suggestion-layout-simple,
+.algolia-autocomplete
+  .ds-dropdown-menu
+  .ds-suggestion.ds-cursor
+  .algolia-docsearch-suggestion:not(.suggestion-layout-simple)
+  .algolia-docsearch-suggestion--content {
+  background: #fff8f9;
+}

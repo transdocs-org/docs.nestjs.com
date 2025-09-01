@@ -1,0 +1,56 @@
+@import '../../../scss/utils.scss';
+
+:host {
+  @include media(small) {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+  }
+}
+
+.social-wrapper {
+  @extend .center-top;
+  float: right;
+  position: relative;
+  display: flex;
+
+  a {
+    @extend .transition-fast;
+    display: inline-flex;
+    vertical-align: middle;
+    color: #fff;
+    font-size: 18px;
+    margin-left: 15px;
+    cursor: pointer;
+
+    .discord-icon {
+      fill: #fff;
+      position: relative;
+
+      &:hover {
+        fill: var(--primary);
+      }
+    }
+
+    &:first-of-type {
+      font-size: 20px;
+    }
+    &:hover {
+      color: var(--primary);
+    }
+  }
+
+  @include media(small) {
+    top: 0;
+    transform: none;
+
+    a {
+      display: none;
+    }
+  }
+  
+  @media print {
+    display: none;
+  }
+}

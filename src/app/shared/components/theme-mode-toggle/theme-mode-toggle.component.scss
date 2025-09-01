@@ -1,0 +1,86 @@
+@use '../../../../scss/utils';
+
+:host {
+  @extend .center-top;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  float: right;
+  padding-right: 40px;
+
+  @include utils.media(medium) {
+    padding-right: 20px;
+  }
+
+  @include utils.media(small) {
+    position: absolute;
+    right: 20px;
+    padding-right: 0;
+  }
+}
+
+.theme-mode-toggle {
+  // Button reset
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: transparent;
+  font: inherit;
+  line-height: normal;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-appearance: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 15px;
+  color: #fff;
+  padding-left: 15px;
+  position: relative;
+
+  @include utils.media(small) {
+    padding: 0;
+    margin: 0;
+  }
+
+  .material-icons {
+    font-size: 20px;
+    cursor: pointer;
+    @include utils.text-gradient();
+
+    @include utils.media(small) {
+      background: #fff;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      background: #fff;
+      opacity: 0.2;
+      left: 0px;
+      top: 2px;
+      bottom: 2px;
+      width: 2px;
+    }
+
+    &:hover {
+      background: #fff;
+
+      @include utils.media(small) {
+        @include utils.text-gradient();
+      }
+    }  
+
+    @include utils.media(small) {
+      font-size: 24px;
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+}
